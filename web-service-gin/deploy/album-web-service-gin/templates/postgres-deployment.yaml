@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.dbName }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.dbName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.dbName }}
+    spec:
+      containers:
+        - name: {{ .Values.dbName }}
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: {{ printf "%s-secret" .Values.dbName }}
+          volumeMounts:
+            - name: {{ printf "%s-storage" .Values.dbName }}
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: {{ printf "%s-storage" .Values.dbName }}
+          persistentVolumeClaim:
+            claimName: {{ printf "%s-pvc" .Values.dbName }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.dbName }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+  selector:
+    app: {{ .Values.dbName }}
