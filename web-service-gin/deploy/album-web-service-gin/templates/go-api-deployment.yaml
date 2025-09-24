@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
         - name: {{ .Values.appName }}
-          image: apigo:alpha
+          image: marceloluna/album-api-go:alpha-1
           envFrom:
             - secretRef:
                 name: {{ printf "%s-secret" .Values.dbName }}
-          imagePullPolicy: Never   # Important: don't try to pull from Docker Hub
+          imagePullPolicy: Always   # Important: When "Never" doesn't try to pull from Docker Hub
           ports:
             - containerPort: 8080
 ---
