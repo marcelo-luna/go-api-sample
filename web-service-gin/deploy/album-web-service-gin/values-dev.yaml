@@ -3,7 +3,7 @@ goApiDeployment:
   appName: albumapi
   replicas: 1
   containers:
-    goApiImage: marceloluna/album-api-go:alpha-1
+    goApiImage: marceloluna/album-api-go:alpha-2
 
 #db
 postgresDeployment:
