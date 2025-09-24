@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ printf "%s-pvc" .Values.dbName }}
+  name: {{ printf "%s-pvc" .Values.postgres-deployment.dbName }}
 spec:
   accessModes:
     - ReadWriteOnce

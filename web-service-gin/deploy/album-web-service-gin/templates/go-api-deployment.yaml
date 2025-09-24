@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.appName }}
+  name: {{ .Values.go-api-deployment.appName }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.go-api-deployment.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.appName }}
+      app: {{ .Values.go-api-deployment.appName }}
   template:
     metadata:
       labels:
-        app: {{ .Values.appName }}
+        app: {{ .Values.go-api-deployment.appName }}
     spec:
       containers:
-        - name: {{ .Values.appName }}
-          image: marceloluna/album-api-go:alpha-1
+        - name: {{ .Values.go-api-deployment.appName }}
+          image: {{ .Values.containers.goApiImage }}
           envFrom:
             - secretRef:
-                name: {{ printf "%s-secret" .Values.dbName }}
+                name: {{ printf "%s-secret" .Values.postgres-deployment.dbName }}
           imagePullPolicy: Always   # Important: When "Never" doesn't try to pull from Docker Hub
           ports:
             - containerPort: 8080
@@ -25,11 +25,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ printf "%s-service" .Values.appName }}
+  name: {{ printf "%s-service" .Values.go-api-deployment.appName }}
 spec:
   type: NodePort
   selector:
-    app: {{ .Values.appName }}
+    app: {{ .Values.go-api-deployment.appName }}
   ports:
     - protocol: TCP
       port: 8080
