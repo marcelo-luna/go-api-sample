@@ -1,40 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.postgres-deployment.dbName }}
+  name: {{ .Values.postgresDeployment.dbName }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.postgres-deployment.dbName }}
+      app: {{ .Values.postgresDeployment.dbName }}
   template:
     metadata:
       labels:
-        app: {{ .Values.postgres-deployment.dbName }}
+        app: {{ .Values.postgresDeployment.dbName }}
     spec:
       containers:
-        - name: {{ .Values.postgres-deployment.dbName }}
-          image: {{ .Values..postgres-deployment.postgresDbImage }}
+        - name: {{ .Values.postgresDeployment.dbName }}
+          image: {{ .Values.postgresDeployment.containers.postgresDbImage }}
           ports:
             - containerPort: 5432
           envFrom:
             - secretRef:
-                name: {{ printf "%s-secret" .Values.postgres-deployment.dbName }}
+                name: {{ printf "%s-secret" .Values.postgresDeployment.dbName }}
           volumeMounts:
-            - name: {{ printf "%s-storage" .Values.postgres-deployment.dbName }}
+            - name: {{ printf "%s-storage" .Values.postgresDeployment.dbName }}
               mountPath: /var/lib/postgresql/data
       volumes:
-        - name: {{ printf "%s-storage" .Values.postgres-deployment.dbName }}
+        - name: {{ printf "%s-storage" .Values.postgresDeployment.dbName }}
           persistentVolumeClaim:
-            claimName: {{ printf "%s-pvc" .Values.postgres-deployment.dbName }}
+            claimName: {{ printf "%s-pvc" .Values.postgresDeployment.dbName }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.postgres-deployment.dbName }}
+  name: {{ .Values.postgresDeployment.dbName }}
 spec:
   type: ClusterIP
   ports:
     - port: 5432
   selector:
-    app: {{ .Values.postgres-deployment.dbName }}
+    app: {{ .Values.postgresDeployment.dbName }}

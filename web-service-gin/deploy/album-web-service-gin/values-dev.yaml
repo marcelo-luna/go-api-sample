@@ -1,12 +1,12 @@
 #application
-go-api-deployment:
+goApiDeployment:
   appName: albumapi
   replicas: 1
   containers:
     goApiImage: marceloluna/album-api-go:alpha-1
 
 #db
-postgres-deployment:
+postgresDeployment:
   dbName: postgres
   containers:
     postgresDbImage: postgres:15
